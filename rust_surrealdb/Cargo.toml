@@ -1,0 +1,10 @@
+[package]
+name = "rust_surrealdb"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+surrealdb = { version = "1.0.0-beta.9", features = ["kv-mem"] }
+
+tokio = { version = "1", features = ["full"] }
+anyhow = "1"
