@@ -1,0 +1,18 @@
+src/codegen/ir.rs
+
+834     Ok(LuaClosureProto {
+835         max_stack_size: frame.max_stack_size,
+836         code: code.into(),
+837         constants: constants.into(),
+838         upvalues: upvalues.into(),
+839         //protos: protos.into(),
+840         protos: protos.into(),
+841         lines_defined: crate::types::LineRange::File,
+842         source,
+843         // TODO: generate debug info    // TODO  GS GUSA
+844         abs_line_info: None,
+845         //line_info: None,
+846         line_info: Some(Box::new([0;1000])),
+847         local_vars: None,
+848     })
+

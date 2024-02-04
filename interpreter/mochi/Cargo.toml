@@ -1,0 +1,51 @@
+[package]
+name = "mochi-lua"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "mochi"
+path = "src/main.rs"
+required-features = ["bin"]
+
+[dependencies]
+anyhow = { version = "1.0.75", optional = true }
+bstr = { version = "1.7.0", features = ["std"], default-features = false }
+byteorder = "1.5.0"
+chrono = { version = "0.4.31", features = ["clock"], default-features = false }
+clap = { version = "4.4.6", features = [
+	"std",
+	"help",
+	"usage",
+	"error-context",
+	"derive",
+	"deprecated",
+], default-features = false, optional = true }
+cpu-time = "1.0.0"
+hashbrown = { version = "0.14.2", features = [
+	"inline-more",
+	"raw",
+], default-features = false }
+rand = { version = "0.8.5", features = ["getrandom"], default-features = false }
+rand_xoshiro = "0.6.0"
+rlua = { version = "0.19.7", features = [
+	"builtin-lua54",
+	"lua-no-oslib",
+], optional = true }
+rustc-hash = "1.1.0"
+rustyline = { version = "12.0.0", default-features = false, optional = true }
+thiserror = "1.0.50"
+
+[target.'cfg(not(target_env = "msvc"))'.dependencies]
+tikv-jemallocator = { version = "0.5.4", optional = true }
+
+[profile.release]
+codegen-units = 1
+lto = true
+panic = "abort"
+
+[features]
+default = ["bin", "jemalloc"]
+bin = ["anyhow", "clap", "rustyline"]
+jemalloc = ["tikv-jemallocator"]
+luac = ["rlua"]
