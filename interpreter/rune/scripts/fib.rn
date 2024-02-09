@@ -1,0 +1,12 @@
+fn fib(n) {
+    if n <= 1 {
+        n
+    } else {
+        fib(n - 1) + fib(n - 2)
+    }
+}
+
+pub fn main() {
+    let ans = fib(15);
+    println!(ans);
+}

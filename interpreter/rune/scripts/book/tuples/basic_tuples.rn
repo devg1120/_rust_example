@@ -1,0 +1,7 @@
+fn foo() {
+    (1, "test")
+}
+
+pub fn main() {
+    dbg(foo());
+}

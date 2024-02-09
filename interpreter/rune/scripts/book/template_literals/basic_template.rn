@@ -1,0 +1,4 @@
+pub fn main() {
+    let age = 30;
+    dbg(`I am ${age} years old!`);
+}

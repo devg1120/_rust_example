@@ -1,0 +1,157 @@
+
+mod foo;   // foo/mod.rn
+mod bar;   // bar.rn
+
+pub async fn main() {
+    let a = [1, 2, 3];
+    let b = '今';
+    let closure = || println("Hello");
+    let closure2 = |x| println("Hello "+ x);
+
+    dbg(a);
+    dbg(b);
+    dbg(function);
+    dbg(function());
+    dbg(drop);
+    dbg(closure);
+    dbg(closure2("GUSA"));
+
+    let str = "ABC";
+    println(str);
+    println(str);
+    //------------------------------------
+    use std::iter::range;
+
+    dbg(range(0, 10));
+    l("------------------------------------ module");
+    dbg(foo::number() + bar::number());
+    l("------------------------------------ function");
+    println!("{}", foox(true));
+    println!("{}", foox(false));
+
+    l("------------------------------------ function return exp");
+    println!("{}", fooz(0)); // => outputs: "less than one"
+    println!("{}", fooz(10)); // => outputs: "something else"
+
+    assert_eq!(fooz(0), "less than one");
+    assert_eq!(fooz(10), "something else");
+
+    l("------------------------------------ match");
+    let number = 6;
+
+    match number {
+        n if n < 5 => {
+            println!("the number is smaller than 5");
+        }
+        5 => {
+            println!("the number is exactly 5");
+        }
+        n => {
+            println!("the number is bigger than 5");
+        }
+    }
+    l("------------------------------------ loop");
+    funcloop().await;
+    l("------------------------------------ Pattern matching");
+    pattern_matching();
+    l("------------------------------------ Template");
+    template();
+    l("------------------------------------ Types");
+    types();
+    l("------------------------------------ ");
+}
+
+fn l(s) {
+   println(s);
+}
+
+fn function() {
+    42
+}
+
+fn foox(condition) {
+    if condition {
+        "Hello"
+    } else {
+        1
+    }
+}
+
+fn fooz(n) {
+    if n < 1 {
+        return "less than one";
+    }
+
+    "something else"
+}
+async fn funcloop() {
+    use time::Duration;
+    let c = 0;
+    loop {
+        c += 1;
+        if c > 3 { break;}
+        println("Hello forever!");
+        time::sleep(Duration::from_secs(1)).await;
+    }
+
+}
+
+fn match_input(n) {
+    match n {
+        1 => println!("The number one."),
+        n if n is i64 => println!("Another number: {}.", n),
+        [1, 2, n, ..] => println!("A vector starting with one and two, followed by {}.", n),
+        "one" => println!("One, but this time as a string."),
+        _ => println!("Something else. Can I go eat now?"),
+    }
+}
+
+fn describe_car(car) {
+    match car {
+        #{ "make": year, .. } if year < 1950 => "What, where did you get that?",
+        #{ "model": "Ford", "make": year, .. } if year >= 2000 => "Pretty fast!",
+        _ => "Can't tell",
+    }
+}
+
+fn pattern_matching() {
+    match_input(1);
+    match_input(2);
+    match_input([1, 2, 42, 84]);
+    match_input("one");
+    match_input(#{ field: 42 });
+    println!("{}", describe_car(#{"model": "Ford", "make": 2000}));
+    println!("{}", describe_car(#{"model": "Honda", "make": 1980}));
+    println!("{}", describe_car(#{"model": "Volvo", "make": 1910}));
+}
+
+fn template() {
+    let age = 30;
+    dbg(`I am ${age} years old!`);
+}
+
+fn dynamic_type(n) {
+    if n is String {
+        "n is a String"
+    } else if n is Vec {
+        "n is a vector"
+    } else {
+        "n is unknown"
+    }
+}
+fn types() {
+    assert!(() is Tuple, "tuples should be tuples");
+    assert!((1, 2) is Tuple, "tuples should be tuples");
+    assert!(true is bool, "bools should be bools");
+    assert!('a' is char, "chars should be chars");
+    assert!(b'a' is u8, "bytes should be bytes");
+    assert!(42 is i64, "integers should be integers");
+    assert!(42.1 is f64, "floats should be floats");
+    assert!("hello" is String, "strings should be strings");
+    assert!("x" is not char, "strings are not chars");
+    assert!(#{"hello": "world"} is Object, "objects should be objects");
+    assert!(["hello", "world"] is Vec, "vectors should be vectors");
+    println!("{}", dynamic_type("Hello"));
+    println!("{}", dynamic_type([1, 2, 3, 4]));
+    println!("{}", dynamic_type(42));
+}

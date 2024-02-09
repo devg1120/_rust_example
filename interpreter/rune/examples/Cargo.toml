@@ -1,0 +1,16 @@
+[package]
+name = "examples"
+version = "0.0.0"
+authors = ["John-John Tedro <udoprog@tedro.se>"]
+edition = "2021"
+publish = false
+
+[features]
+full = ["rune-modules/full"]
+default = ["full"]
+
+[dependencies]
+tokio = { version = "1.28.1", features = ["macros"] }
+
+rune = { path = "../crates/rune" }
+rune-modules = { path = "../crates/rune-modules" }

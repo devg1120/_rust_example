@@ -1,0 +1,11 @@
+/Cargo.lock
+/target
+/*.lua
+/*.py
+/scripts/test.rn
+/.vscode/spellright.dict
+*.rnc
+/.idea
+/flamegraph.svg
+/perf.data
+/perf.data.*

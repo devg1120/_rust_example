@@ -1,0 +1,42 @@
+[package]
+name = "rune-modules"
+version = "0.13.1"
+authors = ["John-John Tedro <udoprog@tedro.se>"]
+edition = "2021"
+rust-version = "1.70"
+description = "Native modules for Rune, an embeddable dynamic programming language for Rust."
+documentation = "https://docs.rs/rune"
+readme = "README.md"
+homepage = "https://github.com/rune-rs/rune"
+repository = "https://github.com/rune-rs/rune"
+license = "MIT OR Apache-2.0"
+keywords = ["language", "scripting", "scripting-language"]
+categories = ["parser-implementations"]
+
+[features]
+default = ["test", "core", "io", "fmt"]
+full = ["time", "http", "json", "toml", "fs", "process", "signal", "rand", "io", "fmt"]
+time = ["tokio", "tokio?/time"]
+fs = ["tokio", "tokio?/fs"]
+http = ["reqwest"]
+json = ["serde_json"]
+process = ["tokio?/process"]
+signal = ["tokio?/signal"]
+rand = ["nanorand"]
+experiments = []
+test = []
+core = []
+io = []
+fmt = []
+
+[dependencies]
+reqwest = { version = "0.11.17", optional = true, default-features = false, features = ["rustls-tls", "gzip", "json"] }
+tokio = { version = "1.28.1", optional = true }
+serde_json = { version = "1.0.96", optional = true }
+toml = { version = "0.7.3", optional = true }
+nanorand = { version = "0.7.0", optional = true, features = ["getrandom"] }
+
+rune = { version = "0.13.1", path = "../rune" }
+
+[package.metadata.docs.rs]
+all-features = true

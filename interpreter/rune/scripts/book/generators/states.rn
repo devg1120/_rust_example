@@ -1,0 +1,11 @@
+fn print_once() {
+    let out = yield 1;
+    println!("{:?}", out);
+    2
+}
+
+pub fn main() {
+    let printer = print_once();
+    dbg(printer.resume(()));
+    dbg(printer.resume("John"));
+}

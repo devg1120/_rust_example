@@ -245,7 +245,7 @@ impl<'gc> LuaClosureProto<'gc> {
     pub(crate) fn func_line(&self, pc: u32) -> Option<u32> {
         // first gets a base line and from there does the increments until
         // the desired instruction.
-        println!("pc:{:?}",pc);
+        println!("pc:{:?}",pc);  // GUSA
         let mut abs = self.base_line(pc);
         let mut base_line = abs.line;
         //let line_info = self.line_info.as_ref()?;

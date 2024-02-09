@@ -1,0 +1,5 @@
+use std::iter::range;
+
+pub fn main() {
+    dbg!(range(0, 10));
+}

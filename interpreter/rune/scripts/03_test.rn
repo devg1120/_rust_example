@@ -1,0 +1,57 @@
+
+fn l(s) {
+   println(s);
+}
+
+pub async fn main() {
+    l("------------------------------------ asynchronous_programming");
+       asynchronous_programming().await;
+    l("------------------------------------ select_block");
+       select_block().await;
+    l("------------------------------------ ");
+}
+
+//================================================================
+async fn asynchronous_programming() {
+    let a = http::get("https://google.com");
+    let b = http::get("https://amazon.com");
+
+    loop {
+        let res = select {
+            res = a => res?,
+            res = b => res?,
+        };
+
+        match res {
+            () => break,
+            result => {
+                println!("{}", result.status());
+            }
+        }
+    }
+}
+
+//================================================================
+struct Timeout;
+
+async fn request(timeout) {
+    let request = http::get(`http://httpstat.us/200?sleep=${timeout}`);
+    let timeout = time::sleep(time::Duration::from_secs(2));
+
+    let result = select {
+        _ = timeout => Err(Timeout),
+        res = request => res,
+    }?;
+
+    println!("{}", result.status());
+    Ok(())
+}
+async fn select_block() {
+   if let Err(Timeout) = request(1000).await {
+        println("1 Request timed out!");
+    }
+
+    if let Err(Timeout) = request(4000).await {
+        println("2 Request timed out!");
+    }
+}
