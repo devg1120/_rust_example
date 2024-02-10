@@ -1,0 +1,19 @@
+[package]
+name = "basic"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[features]
+full = ["rune-modules/full"]
+default = ["full"]
+
+
+[dependencies]
+rune = "0.13.1"
+rune-modules = "0.13.1"
+tokio = { version = "1.28.1", features = ["full"] }
+runestick = "0.2"
+runestick-time = "0.2"
+

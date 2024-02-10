@@ -1,0 +1,16 @@
+[package]
+name = "moonlift"
+version = "0.1.0-alpha.0"
+description = "A pure-rust implementation of *Lua* (5.4) with *just-in-time* (JIT) compilation using `cranelift`"
+authors = ["Christoph Hommelsheim <main@chommel.en>"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/HellButcher/moonlift.git"
+edition = "2021"
+rust-version = "1.65"
+
+[dependencies]
+cranelift = "0.99.1"
+cranelift-jit = "0.99.1"
+cranelift-module = "0.99.1"
+cranelift-native = "0.99.1"
+thiserror = "1.0.47"
