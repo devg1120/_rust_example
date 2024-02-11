@@ -1,23 +1,41 @@
 use rune::runtime::Function;
 use rune::termcolor::{ColorChoice, StandardStream};
 use rune::{Diagnostics, Vm};
+use rune::{ContextError, Module};
 use rune_modules;
-
 use std::sync::Arc;
 
+
+mod stringy_math_macro;
+
+
+pub fn module() -> Result<Module, ContextError> {
+    let mut module = Module::with_crate_item("gs", ["experiments"])?;
+    module.macro_meta(stringy_math_macro::stringy_math)?;
+    Ok(module)
+}
+
 fn main() -> rune::support::Result<()> {
-    let context = rune_modules::default_context()?;
+
+    let mut context = rune_modules::default_context()?;
+
+    context.install(module()?)?;
+
     let runtime = Arc::new(context.runtime()?);
 
     let mut sources = rune::sources! {
         entry => {
+            use ::gs::experiments::stringy_math;
+
             fn foo(a, b) {
-                a + b  
+                a + b 
             }
 
             pub fn main() {
-                let n = 100;
-                foo
+               //let output = stringy_math!(add 10 sub 2 div 3 mul 100);
+               let output = stringy_math!( add 11 add 100);
+               println!("{}", output);
+               foo
             }
         }
     };
