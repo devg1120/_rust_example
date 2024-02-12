@@ -1,0 +1,43 @@
+[package]
+name = "kvsd"
+version = "0.1.2"
+authors = ["ymgyt <yamaguchi7073xtt@gmail.com>"]
+edition = "2018"
+license = "MIT"
+description = "Simple key value store"
+repository = "https://github.com/ymgyt/kvsd"
+readme = "README.md"
+
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[features]
+default = ["cli"]
+cli = ["tracing-subscriber"]
+
+[dependencies]
+tokio = { version = "1.35", features = ["rt", "rt-multi-thread", "io-util", "net", "signal", "fs","sync", "macros", "time"] }
+tokio-rustls = { version = "0.22.0", features = ["dangerous_configuration"] }
+tracing = "0.1.40"
+tracing-subscriber = { version = "0.3.18", optional = true, features = ["chrono", "env-filter"]}
+tracing-futures = "0.2.4"
+async-trait = "0.1.41"
+bytes = "1.0.1"
+chrono = "0.4.19"
+backtrace = "0.3.53"
+crc32fast = "1.2.1"
+num_cpus = "1.13.0"
+clap = "2.33.3"
+atoi = "0.3.3"
+serde_yaml = "0.8.14"
+serde = { version = "1.0.117" , features = ["derive"] }
+rand = "0.8"
+
+[dev-dependencies]
+tokio-test = "0.4.2"
+tempdir = "0.3.7"
+criterion = "0.3"
+
+[[bench]]
+name = "kvsd_benchmark"
+harness = false
