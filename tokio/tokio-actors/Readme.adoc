@@ -1,0 +1,52 @@
+= Tokio actors prototype
+
+This is a small prototype to explore  how a component-based architecture using tokio components might work.
+
+== Design
+
+The code implements communicating "actors" using tokio tasks to run operations on the actors, and tokio channels to communicate.
+
+Tokio channels use enums with data to define the protocol.
+If a client were to use this directly, then the client would be cluttered with low level code to generate the enum value for the message, send the message and wait for a response.
+This will clutter the client code and mix different levels of abstraction.  The details of making "calls" need to be factored out.
+
+This prototype uses traits for the interfaces.
+This means that the interfaces are defined twice, by the trait and the message enum.
+
+The "marshalling" code that converts trait calls to enums and vice versa has been factored out.
+This allows the client to call on a trait function instead of doing all the low level work of sending and receiving messages.
+
+The hope is that the trait definition can at some point be used to code generate the enum and the marshalling code.
+This is not cost-effective for a small prototype, but will pay off in a larger design.
+
+The design also has the nice property of cleanly separating a component into two structs: One outer struct that handles message processing and tasks management (pure infrastructure/boilerplate code) and the actual implementation (which is 100% free from boilerplate code and messaging).
+
+== Component topology
+
+The `main()` function creates two components of types CompA and CompB. CompA has a control interface/trait/channel (ControlA) used by main with a `say_hello()` method.  CompA is connected to CompB using the HelloEvent interface, and CompB is connected back to CompA using an interface of the same type.
+
+When `main()` calls `ControlA::say_hello()`, CompA prints "Hello" and calls `HelloEvent::hello_from()` on CompB.  This makes CompB print "B: Hello from A" and call `HelloEvent::hello_from()` on CompA, which in turn prints "A: Hello from B".  The circular nature of the call is intended to catch any deadlocks caused by a bad implementation.
+
+== Results
+
+The design seems to work well.
+The use of channels processes by a single actor ensure that messages passed on the same channel are processed in order.
+
+The code was fairly straight forward to write with little need to "fight" the rules checker. Once the boilerplate code is in place the actual component logic can be implemented in the inner struct without any concern for the message passing.
+
+Code generation can probably be used to eliminate much of the boilerplate code.
+
+== ToDos
+
+Investigate shutdown in more detail.
+Is it possible for circular graphs to prevent proper shutdown?
+
+The code uses "unbounded" tokio channels. The send method for this is not async and we don't have to think about channel depth. The disadvantage is (perhaps) performance.
+We could consider using normal (bounded) channels. These provide back pressure, but send is async, which forces all "fire and forget" interface methods without return values to be async, which is very unfortunate from a semantic point of view (it will no longer be visible in the interface if the method blocks or not).
+Traits that do not contain async methods can be used easily from non-async code, which is also a notable advantage of unbounded channels.
+It seems that the semantic advantages of unbounded channels make them preferable as long as they are not prohibitively expensive.
+
+The only way to communicate with the actor implementation after it has started is through channels, as the message handling task owns it. If it is desirable to be able to call directly on it as well, then the outer struct and the task need to share ownership through an Arc<Mutex>, which has a performance impact.
+This should be prototyped for verification.
+
+
