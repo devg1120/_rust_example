@@ -1,0 +1,41 @@
+name: Heph-remote
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "remote/**"
+      - ".github/workflows/remote.yml"
+  pull_request:
+    branches: [ main ]
+    paths:
+      - "remote/**"
+      - ".github/workflows/remote.yml"
+permissions:
+  contents: read
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: full
+jobs:
+  Test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: false # FIXME.
+    steps:
+    - uses: actions/checkout@v3
+    - uses: ./.github/workflows/test
+      with:
+        working-directory: remote
+  Sanitiser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: false # FIXME.
+    strategy:
+      fail-fast: false
+      matrix:
+        sanitiser: [address, leak, memory, thread]
+    steps:
+    - uses: actions/checkout@v3
+    - uses: ./.github/workflows/test_sanitizer
+      with:
+        sanitizer: ${{ matrix.sanitiser }}
+        working-directory: remote

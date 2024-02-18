@@ -1,0 +1,54 @@
+name: Heph-inbox
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "inbox/**"
+      - ".github/workflows/inbox.yml"
+  pull_request:
+    branches: [ main ]
+    paths:
+      - "inbox/**"
+      - ".github/workflows/inbox.yml"
+permissions:
+  contents: read
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: full
+jobs:
+  Test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # This often run too many iterations on CI, which is not a real error.
+    continue-on-error: ${{ matrix.release == 'release' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        release: ['', '--release'] # '' => debug.
+    steps:
+    - uses: actions/checkout@v3
+    - uses: ./.github/workflows/test
+      with:
+        test-flags: ${{ matrix.release }}
+        working-directory: inbox
+  Miri:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - uses: actions/checkout@v3
+    - uses: ./.github/workflows/test_miri
+      with:
+        working-directory: inbox
+  Sanitiser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        sanitiser: [address, leak, memory, thread]
+    steps:
+    - uses: actions/checkout@v3
+    - uses: ./.github/workflows/test_sanitizer
+      with:
+        sanitizer: ${{ matrix.sanitiser }}
+        working-directory: inbox

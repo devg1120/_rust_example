@@ -1,0 +1,24 @@
+[package]
+name = "heph-remote"
+version = "0.1.0"
+edition = "2021"
+
+[features]
+default = ["json"]
+# Enables serialisation using JSON.
+json    = ["serde_json"]
+
+[dependencies]
+heph       = { version = "0.5.0", path = "../", default-features = false }
+heph-rt    = { version = "0.5.0", path = "../rt", default-features = false }
+log        = { version = "0.4.17", default-features = false }
+serde      = { version = "1.0.130", default-features = false }
+getrandom  = { version = "0.2.3", default-features = false }
+
+# Optional dependencies, enabled by features.
+# Required by the `json` feature.
+serde_json = { version = "1.0.72", default-features = false, features = ["std"], optional = true }
+
+[dev-dependencies.heph-rt]
+path     = "../rt"
+features = ["test"]

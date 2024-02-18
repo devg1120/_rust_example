@@ -1,0 +1,2 @@
+cd xtra
+cargo run --features=macros --example custom_event_loop

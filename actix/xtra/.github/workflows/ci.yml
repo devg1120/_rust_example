@@ -1,0 +1,51 @@
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+name: Continuous integration
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  RUSTFLAGS: '-Dwarnings' # Never tolerate warnings.
+
+jobs:
+  ci:
+    strategy:
+      matrix:
+        toolchain: [
+          stable,
+          beta,
+          1.75.0 # MSRV
+        ]
+        args: [
+          --all-features,
+          --no-default-features,
+        ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: dtolnay/rust-toolchain@nightly
+
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ matrix.toolchain }}
+          components: clippy, rustfmt
+
+      - run: cargo +nightly update -Z minimal-versions
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ matrix.args }}
+
+      - run: cargo check-custom-fmt
+
+      - run: RUSTDOCFLAGS="--deny rustdoc::broken_intra_doc_links" cargo doc --no-deps --document-private-items --all-features
+
+      - run: cargo clippy --all-targets ${{ matrix.args }}
+
+      - run: cargo test ${{ matrix.args }}

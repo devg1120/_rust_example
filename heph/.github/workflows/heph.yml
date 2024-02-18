@@ -1,0 +1,56 @@
+name: Heph
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "src/**"
+      - "test/**"
+      - "examples/**"
+      - "Makefile"
+      - ".github/workflows/heph.yml"
+  pull_request:
+    branches: [ main ]
+    paths:
+      - "src/**"
+      - "test/**"
+      - "examples/**"
+      - "Makefile"
+      - ".github/workflows/heph.yml"
+permissions:
+  contents: read
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: full
+jobs:
+  Test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: false # FIXME.
+    steps:
+    - uses: actions/checkout@v3
+    - uses: ./.github/workflows/test
+      with:
+        working-directory: ./
+  Miri:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: false # FIXME.
+    steps:
+    - uses: actions/checkout@v3
+    - uses: ./.github/workflows/test_miri
+      with:
+        working-directory: ./
+  Sanitiser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: false # FIXME.
+    strategy:
+      fail-fast: false
+      matrix:
+        sanitiser: [address, leak, memory, thread]
+    steps:
+    - uses: actions/checkout@v3
+    - uses: ./.github/workflows/test_sanitizer
+      with:
+        sanitizer: ${{ matrix.sanitiser }}
+        working-directory: ./

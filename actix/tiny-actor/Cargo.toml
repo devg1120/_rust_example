@@ -1,0 +1,25 @@
+[package]
+name = "tiny-actor"
+version = "0.2.1"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+description = "A minimal actor framework for Rust"
+repository = "https://github.com/jvdwrf/tiny-actor"
+homepage = "https://github.com/jvdwrf/tiny-actor"
+keywords = ["actor", "actor-system", "tokio", "pool"]
+categories = ["concurrency"]
+authors = ["jvdwrf"]
+
+[features]
+internals = []
+
+[dependencies]
+event-listener = "^2.0"
+futures = "^0.3"
+tokio = { version = "^1.0", features = ["time", "rt", "macros"] }
+concurrent-queue = "^1.0"
+thiserror = "^1.0"
+
+[dev-dependencies]
+spin_sleep = "1.1"
+tokio = { version = "1.18", features = ["full"] }

@@ -1,0 +1,23 @@
+name: 'Test with sanitizer'
+description: 'Run tests using `make test_sanitizer`.'
+inputs:
+  sanitizer:
+    description: 'Sanitizer to use.'
+    required: true
+  test-flags:
+    description: 'Additional flags to pass using TEST_FLAGS (see Makefile).'
+    required: false
+  working-directory:
+    description: 'Working directory.'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+  - uses: dtolnay/rust-toolchain@nightly
+    with:
+      components: rust-src
+  - name: Run tests with sanitiser
+    shell: bash
+    run: |
+      cd "${{ inputs.working-directory }}"
+      TEST_FLAGS="${{ inputs.test-flags }}" make test_sanitizer sanitizer="${{ inputs.sanitizer }}"

@@ -1,0 +1,34 @@
+[package]
+name          = "heph-http"
+description   = "Heph-HTTP is a HTTP library build on top of Heph."
+version       = "0.1.0"
+publish       = false # In development.
+authors       = ["Thomas de Zeeuw <thomasdezeeuw@gmail.com>"]
+license       = "MIT"
+documentation = "https://docs.rs/heph-http"
+repository    = "https://github.com/Thomasdezeeuw/heph/tree/main/http"
+readme        = "README.md"
+keywords      = ["http", "async"]
+categories    = ["asynchronous", "web-programming"]
+include       = ["/Cargo.toml", "/src/**/*.rs", "/README.md", "/LICENSE"]
+edition       = "2021"
+
+[dependencies]
+heph     = { version = "0.5.0", default-features = false, path = "../" }
+heph-rt  = { version = "0.5.0", default-features = false, path = "../rt" }
+httparse = { version = "1.8.0", default-features = false }
+httpdate = { version = "1.0.2", default-features = false }
+log      = { version = "0.4.17", default-features = false }
+itoa     = { version = "1.0.6", default-features = false }
+
+[dev-dependencies]
+std-logger = { version = "0.5.0", default-features = false, features = ["log-panic", "nightly"] }
+
+[dev-dependencies.heph]
+path     = "../"
+features = ["test"]
+
+
+[dev-dependencies.heph-rt]
+path     = "../rt"
+features = ["test"]

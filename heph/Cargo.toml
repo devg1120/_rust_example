@@ -1,0 +1,55 @@
+[package]
+name          = "heph"
+description   = "Heph is an actor framework based on asynchronous functions."
+version       = "0.5.0"
+publish       = false # In development.
+authors       = ["Thomas de Zeeuw <thomasdezeeuw@gmail.com>"]
+license       = "MIT"
+documentation = "https://docs.rs/heph"
+repository    = "https://github.com/Thomasdezeeuw/heph"
+readme        = "README.md"
+keywords      = ["actor", "async", "functions"]
+categories    = ["asynchronous", "web-programming"]
+include       = ["/Cargo.toml", "/src/**/*.rs", "/README.md", "/LICENSE"]
+edition       = "2021"
+
+[features]
+default = []
+
+# Feature that enables the `test` module.
+test = ["getrandom"]
+
+[dependencies]
+heph-inbox        = { version = "0.2.3", path = "./inbox", default-features = false }
+log               = { version = "0.4.17", default-features = false, features = ["kv_unstable", "kv_unstable_std"] }
+
+# Optional dependencies, enabled by features.
+# Required by the `test` feature.
+getrandom         = { version = "0.2.2", default-features = false, features = ["std"], optional = true }
+
+[dev-dependencies]
+getrandom         = { version = "0.2.2", default-features = false, features = ["std"] }
+heph-rt           = { version = "0.5.0", path = "./rt", default-features = false, features = ["test"] }
+std-logger        = { version = "0.5.0", default-features = false, features = ["log-panic", "nightly"] }
+
+[[test]]
+name    = "examples"
+
+[[test]]
+name    = "functional"
+required-features = ["test"]
+
+[[test]]
+name    = "message_loss"
+required-features = ["test"]
+
+[workspace]
+members = [
+  "http",
+  "inbox",
+  "remote",
+  "rt",
+  "tools",
+
+  "benches/timers_container",
+]

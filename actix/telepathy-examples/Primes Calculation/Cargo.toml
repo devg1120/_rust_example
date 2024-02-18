@@ -1,0 +1,18 @@
+[package]
+name = "telepathy-pc"
+version = "0.1.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+actix = "0.13.1"
+actix-telepathy = "0.6.0"
+actix-rt = "2.9"
+actix-broker = "0.4.3"
+structopt = "0.3.26"
+tokio = { version = "1.33", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+
+log = "0.4"
+env_logger = "0.10"
